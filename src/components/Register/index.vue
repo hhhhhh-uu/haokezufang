@@ -1,83 +1,57 @@
 <template>
   <div>
-    <van-nav-bar title="登录"/>
-    <van-form @submit="onSubmit" class="form">
-  <van-field
-    v-model="mobile"
-    name="mobile"
-    placeholder="请输入手机号"
-    :rules="mobileRules"
-  >
-  <template #label>
-    <span class="toutiao toutiao-shouji1"></span>
-  </template>
-  </van-field>
-  <van-field
-    v-model="code"
-    name="code"
-    placeholder="请输入验证码"
-    :rules="codeRules"
-  >
-  <template #label>
-    <span class="toutiao toutiao-yanzhengma"></span>
-  </template>
-  </van-field>
-  <div style="margin: 0.42rem;">
-    <van-button block type="info" native-type="submit">提交</van-button>
-  </div>
-</van-form>
+    <van-nav-bar title="登录账号" />
+    <van-form @submit="onSubmit">
+      <van-field
+        v-model="mobile"
+        name="mobile"
+        placeholder="请输入账号"
+        :rules="mobileRules"
+      >
+      </van-field>
+      <van-field v-model="code" name="code" placeholder="请输入密码" />
+      <div style="margin: 0.42rem">
+        <van-button block type="info" native-type="submit">登录</van-button>
+      </div>
+    </van-form>
   </div>
 </template>
 
 <script>
-import{codeRules,mobileRules} from '../rules'
-import { login }from '@/api/user'
+import { mobileRules } from "../rules.js";
+import { login } from "@/api/user";
 export default {
-    name:'login',
-    data() {
+  data() {
     return {
-      mobile: '',
-      code: '',
-      codeRules,
+      mobile: "",
+      code: "",
       mobileRules,
     };
   },
   methods: {
     async onSubmit() {
       try {
-        const res = await login(this.mobile,this.code)
-        this.$toast.success('登录成功')
+        const res = await login(this.mobile, this.code);
+        this.$toast.success("登录成功");
         console.log(res);
       } catch (error) {
-        const status = error.response.status
-        let message = '请重新登录'
-        if (status === 400){
-          message = error.response.data.message
+        // 细分失败
+        const status = error.response.status;
+        let message = "请重新登陆";
+
+        if (status === 400) {
+          message = error.response.data.message;
         }
-        this.$toast.fail(message)
+
+        this.$toast.fail(message);
       }
-    }
+    },
   },
-}
+};
 </script>
 
-<style scoped lang="less">
+<style scoped>
 .van-nav-bar {
-    background-color: #3296fa;
-    :deep(.van-nav-bar__title){
-        color: #fff;
-    }
-}
-  
-  :deep(.form){
-    .van-field__label {
-        flex: 1;
-    }
-    .van-cell__value {
-        flex: 20;
-    }
-    .toutiao {
-    font-size: 40px;
-    }
+  background-color: rgb(68, 195, 106);
 }
 </style>
